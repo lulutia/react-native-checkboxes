@@ -18,33 +18,45 @@ class Checkbox extends Component {
     this.state = {checked: this.props.checked || false};
   }
 
+  _handlePress () {
+    if (this.props.disable) {
+      return;
+    }
+    this.setState({checked: !this.state.checked});
+    this.props.onClick();
+  }
+
   render() {
     const {
       theme = 'default',
       size = 'default',
       label = '',
-      onClick = function () {}
+      labelStyle = {},
+      labelWordsStyle = {},
+      style = {},
+      disable = false
     } = this.props;
 
-    let colorConfig = new BasicColor(theme);
-
+    let colorConfig = new BasicColor(theme, disable);
     return (
       <View style={{flexDirection: 'row', alignItems: 'center'}}>
       <TouchableNativeFeedback
-        style={[OuterView.outerView, {height: Size[size], width: Size[size]}]}
+        style={[OuterView.outerView, {height: Size[size], width: Size[size]}, style]}
         background={TouchableNativeFeedback.Ripple(colorConfig.rippleColor, true)}
-        onPress={() => {this.setState({checked: !this.state.checked}); onClick();}}
+        onPress={() => this._handlePress()}
         {...this.props}>
         <View
-          style={[{height: Size[size], flexDirection: 'row', width: Size[size]}, OuterView.ripple]}>
+          style={[{height: Size[size], flexDirection: 'row', width: Size[size]}, OuterView.ripple, style]}>
           <CheckboxItem size={Size[size]} scale={Scale[size]} theme={colorConfig.themeColor} checked={this.state.checked}/>
         </View>
       </TouchableNativeFeedback>
       <TouchableNativeFeedback
-        onPress={() => {this.setState({checked: !this.state.checked}); onClick();}}
+        style={[OuterView.outerView, {height: Size[size]}, labelStyle]}
+        background={TouchableNativeFeedback.Ripple(colorConfig.rippleColor)}
+        onPress={() => this._handlePress()}
       >
-        <View>
-        <Text >{label}</Text>
+        <View style={[{height: Size[size], flexDirection: 'row', paddingLeft: 5, paddingRight: 5}, OuterView.ripple, labelStyle]}>
+        <Text style={labelWordsStyle}>{label}</Text>
         </View>
       </TouchableNativeFeedback>
       </View>

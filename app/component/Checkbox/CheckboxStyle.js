@@ -3,8 +3,9 @@ import {BackgroundColors, ActiveColor, DisableColor} from './CheckboxInfo';
 import {Color, RGB, HSL} from 'react-native-colortool';
 
 export class BasicColor {
-  constructor (theme) {
+  constructor (theme, disable) {
     this.theme = theme || '';
+    this.disable = disable || false;
     this.themeColor = this.getBasicColor();
   }
 
@@ -13,6 +14,9 @@ export class BasicColor {
   }
 
   getBasicColor () {
+    if (this.disable) {
+      return '#B0B0B0';
+    }
     let themeMap = ['orange', 'blue', 'red', 'gray', 'default'];
     let themeColor;
     if (themeMap.indexOf(this.theme) === -1) {
